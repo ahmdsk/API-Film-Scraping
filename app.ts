@@ -10,29 +10,45 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/movies", async (req: Request, res: Response) => {
-  const url = "https://ngefilm21.shop/";
-  const $ = cheerio.load(await getHtmlData(url));
+app.get("/movies/:page?", async (req: Request, res: Response) => {
+  let url = "https://ngefilm21.shop/";
+  let $ = cheerio.load(await getHtmlData(url));
+
+  const paginate = $(".pagination");
+  let count_last_page: number = 0;
+
+  // Setter variable count_last_page
+  paginate.each((i, el) => {
+    // Remove next page button
+    $(el).find("a.next.page-numbers").remove();
+
+    // Get last page number paginate
+    count_last_page = parseInt($(el).find("a.page-numbers").last().text());
+  });
+
+  // Get page number from params
+  const page = parseInt(req.params.page);
+  page > 1
+    ? page <= count_last_page
+      ? (url = `https://ngefilm21.shop/page/${page}/`)
+      : url
+    : url;
+
+  console.log(`🐢 You now in url: ${url}`);
+  $ = cheerio.load(await getHtmlData(url));
 
   const movies: IMovie[] = [];
   const container = $("article.item-infinite");
   container.each((i, el) => {
     movies.push({
       title: $(el).find("h2.entry-title a").text(),
-      // link: $(el).find("h2.entry-title a").attr("href"),
-      // thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
-      // duration: $(el).find(".gmr-duration-item").text().trim(),
-      // rating: $(el).find(".gmr-rating-item").text().trim(),
-      // quality: $(el).find(".gmr-quality-item a").text() || "TV Show",
-      // episode: $(el).find(".gmr-numbeps").text()
+      link: $(el).find("h2.entry-title a").attr("href"),
+      thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
+      duration: $(el).find(".gmr-duration-item").text().trim(),
+      rating: $(el).find(".gmr-rating-item").text().trim(),
+      quality: $(el).find(".gmr-quality-item a").text() || "TV Show",
+      episode: $(el).find(".gmr-numbeps").text(),
     });
-  });
-
-  const paginate = $(".pagination").find("a.page-numbers");
-  paginate.each((i, el) => {
-    if(i == 2) {
-      console.log($(el).text())
-    }
   });
 
   res.status(200).json({
