@@ -29,9 +29,7 @@ app.get("/movies/:page?", async (req: Request, res: Response) => {
   // Get page number from params
   const page = parseInt(req.params.page);
   page > 1
-    ? page <= count_last_page
-      ? (url = `https://ngefilm21.shop/page/${page}/`)
-      : url
+    ? page <= count_last_page && (url = `https://ngefilm21.shop/page/${page}/`)
     : url;
 
   console.log(`🐢 You now in url: ${url}`);
