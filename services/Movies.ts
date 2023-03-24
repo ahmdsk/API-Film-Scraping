@@ -2,6 +2,7 @@ import * as cheerio from "cheerio";
 import { Request, Response } from "express";
 import { getHtmlData } from "../helper/html_parser";
 import { IMovie } from "../interface/IMovie";
+import { responseErrorWithMessage, responseSuccessWithData } from "../utils/Response";
 
 export async function getAllMovies(req: Request, res: Response) {
   let url = "https://ngefilm21.shop/";
@@ -22,7 +23,9 @@ export async function getAllMovies(req: Request, res: Response) {
   // Get page number from params
   const page = parseInt(req.params.page);
   page > 1
-    ? page <= count_last_page && (url = `https://ngefilm21.shop/page/${page}/`)
+    ? page <= count_last_page
+      ? (url = `https://ngefilm21.shop/page/${page}/`)
+      : res.status(404).json(responseErrorWithMessage("Page Not Found"))
     : url;
 
   console.log(`🐢 You now in url: ${url}`);
@@ -42,7 +45,15 @@ export async function getAllMovies(req: Request, res: Response) {
     });
   });
 
-  res.status(200).json({
-    data: movies,
-  });
-};
+  res.status(200).json(responseSuccessWithData(movies));
+}
+
+export async function getDetailMovie(req: Request, res: Response) {
+  if (!req.params.slug) {
+    return res.status(400).json({ message: "Bad Request" });
+  }
+
+  let slug = req.params.slug;
+  console.log(slug);
+  // let $ = cheerio.load(await getHtmlData(link));
+}
