@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "start": "npx nodemon app.ts"
+    "dev": "npx nodemon app.ts",
+    "build": "npx tsc"
   },
   "license": "MIT",
   "dependencies": {
