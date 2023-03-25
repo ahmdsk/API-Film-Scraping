@@ -7,7 +7,6 @@ import { IContainerMovieData, IMovie, MovieData, MovieDetail } from "../interfac
 import {
   responseErrorWithMessage,
   responseSuccessWithData,
-  responseSuccessWithMessage,
 } from "../utils/Response";
 
 export async function getAllMovies(req: Request, res: Response) {
