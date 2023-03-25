@@ -12,8 +12,8 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/movies/:page?", getAllMovies);
 app.get("/movies/detail/:slug", getDetailMovie);
 
-app.get("/movies/detail/tv/:slug", getDetailTV);
-app.get("/movies/detail/tv/eps/:slug", getDetailEpisodeTV);
+app.get("/tv/:slug", getDetailTV);
+app.get("/tv/eps/:slug", getDetailEpisodeTV);
 
 app.listen(port, () => {
   console.log(`🚀 App listening at http://localhost:${port}`);
