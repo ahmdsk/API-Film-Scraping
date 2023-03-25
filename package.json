@@ -4,8 +4,7 @@
   "main": "app.ts",
   "scripts": {
     "dev": "npx nodemon app.ts",
-    "build": "npx tsc",
-    "prod": "npx tsc && cd ./dist && node app.js"
+    "build": "npx tsc"
   },
   "license": "MIT",
   "dependencies": {
