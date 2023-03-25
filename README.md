@@ -17,7 +17,7 @@ Scrap Web Nonton Film Dengan NodeJS + Typescript + Express + Cheerio
 ```
 Method: GET
 URL: /movies
-OR URL: /movies/10
+Pagination URL: /movies/10
 ```
 #### Response
 ```
