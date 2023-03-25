@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { getHtmlData } from "../helper/html_parser";
 import removeSeparator from "../helper/remove_separator";
 import { DetailVote } from "../interface/DetailVote";
+import { IDownloadLinks } from "../interface/DownloadLinks";
 import { IContainerTVData, MovieData, MovieDetail } from "../interface/Movie";
 import {
   responseErrorWithMessage,
@@ -118,6 +119,65 @@ export async function getDetailTV(req: Request, res: Response) {
         network: container_movie_data.Jaringan ?? "",
         artist: container_movie_data.Pemain ?? "",
         streaming_links,
+      })
+    );
+  } catch (error) {
+    console.log("🐢 Error getDetailMovie: ", error);
+    res.status(500).json(responseErrorWithMessage());
+  }
+}
+
+export async function getDetailEpisodeTV(req: Request, res: Response) {
+  if (!req.params.slug) {
+    return res.status(400).json(responseErrorWithMessage());
+  }
+
+  try {
+    let slug = req.params.slug;
+    let url = "https://ngefilm21.shop/eps/";
+    let link = url + slug;
+
+    let $ = cheerio.load(await getHtmlData(link));
+
+    // get stream links
+    const stream_links = [];
+    const num_of_stream_links = $("ul.muvipro-player-tabs li:last-child a")
+      .text()
+      .split(" ")
+      .at(-1);
+    if (num_of_stream_links) {
+      for (let i = 2; i <= parseInt(num_of_stream_links); i++) {
+        stream_links.push(url + slug + "/?player=" + i);
+      }
+    }
+
+    const streaming_links = [];
+    for (let i = 0; i < stream_links.length; i++) {
+      const $ = cheerio.load(await getHtmlData(stream_links[i]));
+      const stream_link = $(".gmr-embed-responsive iframe").attr("src");
+
+      streaming_links.push(stream_link);
+    }
+
+    // Get Download Link
+    const download = $("#download");
+    const download_links: IDownloadLinks[] = [];
+    download.each((i, el) => {
+      $(el)
+        .find("a.button.button-shadow")
+        .each((i, el) => {
+          download_links.push({
+            link: $(el).attr("href"),
+            text: $(el).text(),
+          });
+        });
+    });
+
+    res.status(200).json(
+      responseSuccessWithData({
+        title: $("h1.entry-title").text(),
+        streaming_links,
+        download_links,
       })
     );
   } catch (error) {
