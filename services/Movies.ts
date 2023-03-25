@@ -2,9 +2,12 @@ import * as cheerio from "cheerio";
 import { Request, Response } from "express";
 import { getHtmlData } from "../helper/html_parser";
 import removeSeparator from "../helper/remove_separator";
+import { IContainerMovieData } from "../interface/ContainerMovieData";
 import { DetailVote } from "../interface/DetailVote";
 import { IDownloadLinks } from "../interface/DownloadLinks";
-import { IContainerMovieData, IMovie, MovieData, MovieDetail } from "../interface/Movie";
+import { IMovie } from "../interface/Movie";
+import { MovieData } from "../interface/MovieData";
+import { MovieDetail } from "../interface/MovieDetail";
 import {
   responseErrorWithMessage,
   responseSuccessWithData,
