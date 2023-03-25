@@ -44,17 +44,16 @@ export async function getAllMovies(req: Request, res: Response) {
   const container = $("article.item-infinite");
   container.each((i, el) => {
     let link = $(el).find("h2.entry-title a").attr("href");
-    let slug = link?.replace(/^https:\/\/ngefilm21\.shop/, "");
 
     movies.push({
       title: $(el).find("h2.entry-title a").text(),
-      link,
-      slug,
+      slug: link?.replace(/^https:\/\/ngefilm21\.shop/, ""),
       thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
       duration: $(el).find(".gmr-duration-item").text().trim(),
       rating: $(el).find(".gmr-rating-item").text().trim(),
       quality: $(el).find(".gmr-quality-item a").text() || "TV Show",
       episode: $(el).find(".gmr-numbeps").text(),
+      link,
     });
   });
 
