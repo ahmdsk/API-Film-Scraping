@@ -9,7 +9,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/movies/:page?", getAllMovies);
-app.get("/movies/detail/:link", getDetailMovie);
+app.get("/movies/detail/:slug", getDetailMovie);
 
 app.listen(port, () => {
   console.log(`🚀 App listening at http://localhost:${port}`);
