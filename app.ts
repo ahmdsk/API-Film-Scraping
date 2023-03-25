@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
-import getDetailTV, { getAllMovies, getDetailMovie } from "./services/Movies";
+import { getAllMovies, getDetailMovie } from "./services/Movies";
+import { getDetailTV } from "./services/TV";
 
 const app = express();
 const port = 3000;
@@ -10,6 +11,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/movies/:page?", getAllMovies);
 app.get("/movies/detail/:slug", getDetailMovie);
+
 app.get("/movies/detail/tv/:slug", getDetailTV);
 
 app.listen(port, () => {
