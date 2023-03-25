@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { getAllMovies, getDetailMovie } from "./services/Movies";
-import { getDetailEpisodeTV, getDetailTV } from "./services/TV";
+import { getAllMovies, getDetailMovie } from "./src/services/Movies";
+import { getDetailTV, getDetailEpisodeTV } from "./src/services/TV";
 
 const app = express();
 const port = 3000;
