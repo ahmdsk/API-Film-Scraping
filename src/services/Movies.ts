@@ -48,7 +48,7 @@ export async function getAllMovies(req: Request, res: Response) {
 
       movies.push({
         title: $(el).find("h2.entry-title a").text(),
-        slug: link?.replace(/^https:\/\/ngefilm21\.shop/, ""),
+        slug: link?.replace(/^https:\/\/ngefilm21\.shop/, "").replace(/tv\//g, "").replace(/\//g, ""),
         thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
         duration: $(el).find(".gmr-duration-item").text().trim(),
         rating: $(el).find(".gmr-rating-item").text().trim(),

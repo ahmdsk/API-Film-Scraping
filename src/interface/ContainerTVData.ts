@@ -5,5 +5,6 @@ export interface IContainerTVData {
   Rilis: string | undefined;
   Episode: string | undefined;
   Jaringan: string | undefined;
+  Direksi: string | undefined;
   Pemain: string | undefined;
 }

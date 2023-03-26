@@ -73,6 +73,7 @@ export async function getDetailTV(req: Request, res: Response) {
       Rilis: undefined,
       Episode: undefined,
       Jaringan: undefined,
+      Direksi: undefined,
       Pemain: undefined,
     };
 
@@ -91,6 +92,8 @@ export async function getDetailTV(req: Request, res: Response) {
         container_movie_data.Jaringan = value_movie_data[i];
       } else if (key_movie_data[i] === "Pemain") {
         container_movie_data.Pemain = value_movie_data[i];
+      } else if (key_movie_data[i] === "Direksi") {
+        container_movie_data.Direksi = value_movie_data[i];
       }
     }
 
@@ -102,7 +105,7 @@ export async function getDetailTV(req: Request, res: Response) {
         let link = $(el).attr("href");
         streaming_links.push({
           link,
-          slug: link?.replace(/^https:\/\/ngefilm21\.shop/, ""),
+          slug: link?.replace(/^https:\/\/ngefilm21\.shop/, "").replace(/eps\//g, "").replace(/\//g, ""),
         });
       }
     });
@@ -119,12 +122,13 @@ export async function getDetailTV(req: Request, res: Response) {
         num_episode: container_movie_data.Episode ?? "",
         realease: container_movie_data.Rilis ?? "",
         network: container_movie_data.Jaringan ?? "",
+        director: container_movie_data.Direksi ?? "",
         artist: container_movie_data.Pemain ?? "",
         streaming_links,
       })
     );
   } catch (error) {
-    console.log("🐢 Error getDetailMovie: ", error);
+    console.log("🐢 Error getDetailTV: ", error);
     res.status(500).json(responseErrorWithMessage());
   }
 }
@@ -183,7 +187,7 @@ export async function getDetailEpisodeTV(req: Request, res: Response) {
       })
     );
   } catch (error) {
-    console.log("🐢 Error getDetailMovie: ", error);
+    console.log("🐢 Error getDetailEpisodeTV: ", error);
     res.status(500).json(responseErrorWithMessage());
   }
 }
