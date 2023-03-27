@@ -185,7 +185,7 @@ export async function getDetailMovie(req: Request, res: Response) {
       .split(" ")
       .at(-1);
     if (num_of_stream_links) {
-      for (let i = 2; i <= parseInt(num_of_stream_links); i++) {
+      for (let i = 1; i <= parseInt(num_of_stream_links); i++) {
         stream_links.push(url + slug + "/?player=" + i);
       }
     }
