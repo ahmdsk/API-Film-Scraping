@@ -9,12 +9,13 @@ import {
 
 export async function SearchMovie(req: Request, res: Response) {
   try {
-    let url = "https://ngefilm21.shop/?s=";
+    let url = "https://ngefilm21.club/?s=";
     let params = req.query.s as string;
     params = params.toLowerCase().replace(/ /g, "+");
+    params += "&post_type[]=post&post_type[]=tv";
 
     if (req.query.page != undefined) {
-      url = "https://ngefilm21.shop/page/" + req.query.page + "/?s=";
+      url = "https://ngefilm21.club/page/" + req.query.page + "/?s=";
     }
 
     const full_url = url + params;
@@ -27,30 +28,20 @@ export async function SearchMovie(req: Request, res: Response) {
     });
 
     const movies: IMovie[] = [];
-    $("#gmr-main-load").each((i, el) => {
-      $(el)
-        .find(".item-infinite")
-        .each((i, el) => {
-          let link = $(el).find("h2.entry-title a").attr("href");
-          link = link
-            ?.replace(/https:\/\/ngefilm21.shop\//g, "")
-            .replace(/\/$/g, "")
-            .replace("tv/", "");
-          let quality: string = $(el).find(".gmr-quality-item").text();
+    const container = $("article.item-infinite");
+    container.each((i, el) => {
+      let link = $(el).find("h2.entry-title a").attr("href");
 
-          movies.push({
-            title: $(el).find("h2.entry-title a").text(),
-            link: link,
-            thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
-            duration: $(el)
-              .find("[property='duration']")
-              .text()
-              .replace(" ", ""),
-            rating: $(el).find(".gmr-rating-item").text().replace(" ", ""),
-            quality: quality == "" ? "TV Show" : quality,
-            episode: $(el).find(".gmr-numbeps").text(),
-          });
-        });
+      movies.push({
+        title: $(el).find("h2.entry-title a").text(),
+        slug: link?.replace(/^https:\/\/ngefilm21\.club/, "").replace(/tv\//g, "").replace(/\//g, ""),
+        thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
+        duration: $(el).find(".gmr-duration-item").text().trim(),
+        rating: $(el).find(".gmr-rating-item").text().trim(),
+        quality: $(el).find(".gmr-quality-item a").text() || "TV Show",
+        episode: $(el).find(".gmr-numbeps").text(),
+        link,
+      });
     });
 
     res.status(200).json(

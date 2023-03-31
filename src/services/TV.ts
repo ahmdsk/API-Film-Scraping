@@ -19,7 +19,7 @@ export async function getDetailTV(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = "https://ngefilm21.shop/";
+    let url = "https://ngefilm21.club/";
     let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));
@@ -105,7 +105,7 @@ export async function getDetailTV(req: Request, res: Response) {
         let link = $(el).attr("href");
         streaming_links.push({
           link,
-          slug: link?.replace(/^https:\/\/ngefilm21\.shop/, "").replace(/eps\//g, "").replace(/\//g, ""),
+          slug: link?.replace(/^https:\/\/ngefilm21\.club/, "").replace(/eps\//g, "").replace(/\//g, ""),
         });
       }
     });
@@ -140,7 +140,7 @@ export async function getDetailEpisodeTV(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = "https://ngefilm21.shop/eps/";
+    let url = "https://ngefilm21.club/eps/";
     let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));

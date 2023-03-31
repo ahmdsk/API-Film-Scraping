@@ -6,7 +6,7 @@ import { responseSuccessWithMessage } from "./src/utils/Response";
 import cors from "cors"
 import dotenv from "dotenv"
 import { SearchMovie } from "./src/services/SearchMovie";
-import { MovieCategory } from "./src/services/MovieCategory";
+import { MovieCategory, MovieCategoryList } from "./src/services/MovieCategory";
 dotenv.config()
 
 const app = express();
@@ -31,7 +31,8 @@ app.get("/tv/eps/:slug", getDetailEpisodeTV);
 
 app.get("/search", SearchMovie);
 
-app.get("/category", MovieCategory)
+app.get("/category", MovieCategory);
+app.get("/detailcategory", MovieCategoryList);
 
 app.listen(port, () => {
   console.log(`🚀 App listening at http://localhost:${port}`);

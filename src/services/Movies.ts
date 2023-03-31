@@ -15,7 +15,7 @@ import {
 
 export async function getAllMovies(req: Request, res: Response) {
   try {
-    let url = "https://ngefilm21.shop/";
+    let url = "https://ngefilm21.club/";
     let $ = cheerio.load(await getHtmlData(url));
 
     const paginate = $(".pagination");
@@ -34,7 +34,7 @@ export async function getAllMovies(req: Request, res: Response) {
     const page = parseInt(req.params.page);
     page > 1
       ? page <= count_last_page
-        ? (url = `https://ngefilm21.shop/page/${page}/`)
+        ? (url = `https://ngefilm21.club/page/${page}/`)
         : res.status(404).json(responseErrorWithMessage("Page Not Found"))
       : url;
 
@@ -48,7 +48,7 @@ export async function getAllMovies(req: Request, res: Response) {
 
       movies.push({
         title: $(el).find("h2.entry-title a").text(),
-        slug: link?.replace(/^https:\/\/ngefilm21\.shop/, "").replace(/tv\//g, "").replace(/\//g, ""),
+        slug: link?.replace(/^https:\/\/ngefilm21\.club/, "").replace(/tv\//g, "").replace(/\//g, ""),
         thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
         duration: $(el).find(".gmr-duration-item").text().trim(),
         rating: $(el).find(".gmr-rating-item").text().trim(),
@@ -77,7 +77,7 @@ export async function getDetailMovie(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = "https://ngefilm21.shop/";
+    let url = "https://ngefilm21.club/";
     let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));
