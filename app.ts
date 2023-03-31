@@ -2,8 +2,10 @@ import express, { NextFunction, Request, Response } from "express";
 import { getAllMovies, getDetailMovie } from "./src/services/Movies";
 import { getDetailTV, getDetailEpisodeTV } from "./src/services/TV";
 import { responseSuccessWithMessage } from "./src/utils/Response";
+
 import cors from "cors"
 import dotenv from "dotenv"
+import { SearchMovie } from "./src/services/SearchMovie";
 dotenv.config()
 
 const app = express();
@@ -25,6 +27,8 @@ app.get("/movies/detail/:slug", getDetailMovie);
 
 app.get("/tv/:slug", getDetailTV);
 app.get("/tv/eps/:slug", getDetailEpisodeTV);
+
+app.get("/search", SearchMovie);
 
 app.listen(port, () => {
   console.log(`🚀 App listening at http://localhost:${port}`);
