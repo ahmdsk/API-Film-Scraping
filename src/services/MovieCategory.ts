@@ -11,7 +11,7 @@ export async function MovieCategory(req: Request, res: Response) {
   const url = "https://ngefilm21.club";
   const $ = cheerio.load(await getHtmlData(url));
 
-  const categories: any[] = [];
+  let categories: any[] = [];
   $(".menu-item-object-category.menu-item-has-children").each((i, el) => {
     $(el)
       .find("a")
@@ -26,13 +26,18 @@ export async function MovieCategory(req: Request, res: Response) {
       });
   });
 
+  categories = categories.filter((cat) => {
+    return cat.slug != 'united-kingdom'
+  })
+
   res.status(200).json(responseSuccessWithData(categories));
 }
 
 export async function MovieCategoryList(req: Request, res: Response) {
   try {
-    const url = req.query.url as string;
-    const $ = cheerio.load(await getHtmlData(url));
+    const slugParam = req.query.slug as string;
+    let url = `https://ngefilm21.club/Genre/${slugParam}/`;
+    let $ = cheerio.load(await getHtmlData(url));
 
     let max_page = 0;
     $(".pagination").each((i, el) => {
@@ -40,21 +45,28 @@ export async function MovieCategoryList(req: Request, res: Response) {
       max_page = parseInt($(el).find("a.page-numbers").last().text());
     });
 
+    if(req.query.page) {
+      const page = req.query.page as string;
+      url = url + `page/${page}/`;
+    }
+
+    $ = cheerio.load(await getHtmlData(url));
+
     const movies: IMovie[] = [];
     $("#gmr-main-load").each((i, el) => {
       $(el)
         .find(".item-infinite")
         .each((i, el) => {
           let link = $(el).find("h2.entry-title a").attr("href");
-          link = link
-            ?.replace(/https:\/\/ngefilm21.club\//g, "")
-            .replace(/\/$/g, "")
-            .replace("tv/", "");
           let quality: string = $(el).find(".gmr-quality-item").text();
 
           movies.push({
             title: $(el).find("h2.entry-title a").text(),
-            link: link,
+            link,
+            slug: link
+              ?.replace(/^https:\/\/ngefilm21\.club/, "")
+              .replace(/tv\//g, "")
+              .replace(/\//g, ""),
             thumbnail_url: $(el).find("img.attachment-medium").attr("src"),
             duration: $(el)
               .find("[property='duration']")
