@@ -15,7 +15,7 @@ const port = process.env.PORT || 3001;
 app.use(cors())
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Referrer-Policy", "no-referrer")
-  res.setHeader("Referer", "https://ngefilm21.shop/")
+  res.setHeader("Referer", "https://ngefilm21.club/")
   next();
 })
 

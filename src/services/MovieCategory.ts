@@ -8,29 +8,34 @@ import {
 } from "../utils/Response";
 
 export async function MovieCategory(req: Request, res: Response) {
-  const url = "https://ngefilm21.club";
-  const $ = cheerio.load(await getHtmlData(url));
+  try {
+    const url = "https://ngefilm21.club/";
+    const $ = cheerio.load(await getHtmlData(url));
 
-  let categories: any[] = [];
-  $(".menu-item-object-category.menu-item-has-children").each((i, el) => {
-    $(el)
-      .find("a")
-      .each((i, el) => {
-        let link = $(el).attr("href") as string;
+    let categories: any[] = [];
+    $(".menu-item-object-category.menu-item-has-children").each((i, el) => {
+      $(el)
+        .find("a")
+        .each((i, el) => {
+          let link = $(el).attr("href") as string;
 
-        categories.push({
-          title: $(el).text(),
-          link,
-          slug: link.split("/").at(-2),
+          categories.push({
+            title: $(el).text(),
+            link,
+            slug: link.split("/").at(-2),
+          });
         });
-      });
-  });
+    });
 
-  categories = categories.filter((cat) => {
-    return cat.slug != 'united-kingdom'
-  })
+    categories = categories.filter((cat) => {
+      return cat.slug != "united-kingdom";
+    });
 
-  res.status(200).json(responseSuccessWithData(categories));
+    res.status(200).json(responseSuccessWithData(categories));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(responseErrorWithMessage());
+  }
 }
 
 export async function MovieCategoryList(req: Request, res: Response) {
@@ -45,7 +50,7 @@ export async function MovieCategoryList(req: Request, res: Response) {
       max_page = parseInt($(el).find("a.page-numbers").last().text());
     });
 
-    if(req.query.page) {
+    if (req.query.page) {
       const page = req.query.page as string;
       url = url + `page/${page}/`;
     }
