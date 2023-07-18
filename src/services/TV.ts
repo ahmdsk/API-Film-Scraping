@@ -11,6 +11,8 @@ import {
   responseErrorWithMessage,
   responseSuccessWithData,
 } from "../utils/Response";
+import { Config } from "../Config";
+import removeUrl from "../helper/remove_url";
 
 export async function getDetailTV(req: Request, res: Response) {
   if (!req.params.slug) {
@@ -19,7 +21,7 @@ export async function getDetailTV(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = "https://ngefilm21.club/";
+    let url = Config.filmURL + "/";
     let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));
@@ -105,7 +107,7 @@ export async function getDetailTV(req: Request, res: Response) {
         let link = $(el).attr("href");
         streaming_links.push({
           link,
-          slug: link?.replace(/^https:\/\/ngefilm21\.club/, "").replace(/eps\//g, "").replace(/\//g, ""),
+          slug: removeUrl(link ?? ''),
         });
       }
     });
@@ -140,7 +142,7 @@ export async function getDetailEpisodeTV(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = "https://ngefilm21.club/eps/";
+    let url = Config.filmURL + "/";
     let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));

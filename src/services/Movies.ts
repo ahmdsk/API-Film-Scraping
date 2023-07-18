@@ -78,8 +78,8 @@ export async function getDetailMovie(req: Request, res: Response) {
 
   try {
     let slug = req.params.slug;
-    let url = Config.filmURL;
-    let link = url +"/"+ slug;
+    let url = Config.filmURL + "/";
+    let link = url + slug;
 
     let $ = cheerio.load(await getHtmlData(link));
 
